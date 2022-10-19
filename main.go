@@ -27,10 +27,13 @@ func main() {
 		log.Fatal("could not unmarshall the data")
 	}
 
-	fmt.Printf("%s,%s,%s,%s,%s,%s,%s\n", "Namespace", "NodeName", "PodName", "ContainerName", "MemoryRequest", "MemoryLimit", "PodPhase")
+	fmt.Printf("%s,%s,%s,%s,%s,%s,%s,%s\n", "Namespace", "NodeName", "PodName", "ContainerName", "MemoryRequest", "MemoryLimit", "PodImage", "PodPhase")
 	for _, pod := range podList.Items {
 		for _, container := range pod.Spec.Containers {
-			fmt.Printf("%s,%s,%s,%s,%s,%s,%s\n", pod.Namespace, pod.Spec.NodeName, pod.Name, container.Name, container.Resources.Requests.Memory().String(), container.Resources.Limits.Memory().String(), pod.Status.Phase)
+		    for _, container_image := range pod.Status.ContainerStatuses {
+			    fmt.Printf("%s,%s,%s,%s,%s,%s,%s,%s\n", pod.Namespace, pod.Spec.NodeName, pod.Name, container.Name, container.Resources.Requests.Memory().String(), container.Resources.Limits.Memory().String(), container_image.Image, pod.Status.Phase)
+		    }
+
 		}
 
 	}
